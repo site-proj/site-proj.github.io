@@ -15,3 +15,7 @@ hr{border:0;border-top:1px solid var(--line);margin:25px 0 23px}.help,.privacy{f
 @media(max-width:370px){.topbar .pill{font-size:8px;padding:8px}.tags span:nth-child(n+3){display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{html,body{background:white!important}body:before,.topbar,.hero,.form-panel,.preview-bar,footer{display:none!important}.shell{max-width:none;padding:0}.workspace{display:block;padding:0}.preview-panel{border:0;box-shadow:none;border-radius:0}.preview-stage{background:white;padding:0;display:block;overflow:visible}.doc{max-width:none;min-height:0;width:100%;box-shadow:none;padding:8mm 12mm}.doc section p{font-size:11px}.doc h2{font-size:18px}@page{size:A4;margin:8mm}}
+
+/* Gerador direto: formulário imediatamente após o cabeçalho */
+.workspace{padding-top:24px}
+@media(max-width:640px){.workspace{padding-top:14px}.section-head{margin-bottom:18px}.topbar{justify-content:flex-start}}
