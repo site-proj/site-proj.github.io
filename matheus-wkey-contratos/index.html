@@ -1,0 +1,33 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090909">
+<meta name="description" content="Gerador de contratos do Matheus WKEY"><title>Matheus WKEY | Contratos</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="shell"><header class="topbar"><span class="brand">MATHEUS <b>WKEY</b></span><span class="navhint">ÁREA DE DOCUMENTOS / GESTÃO DE ALUNOS</span><span class="pill">GERADOR DE CONTRATOS</span></header>
+<section class="hero"><div class="eyebrow">WKEY STUDIO / DOCUMENTOS</div><h1>Menos burocracia.<br><em>Mais música.</em></h1><p>Preencha os dados do aluno, confira o documento e gere um contrato em PDF. O professor e as cláusulas já estão definidos.</p><div class="tags"><span>Professor fixo</span><span>Prévia em tempo real</span><span>PDF direto</span><span>Sem cadastro</span></div></section>
+<main class="workspace" id="novo-contrato"><section class="panel form-panel"><div class="section-head"><span class="step">01</span><div><h2>Novo contrato</h2><p>Somente os dados do aluno e da contratação.</p></div></div>
+<div class="fixed"><div class="fixed-top"><strong>PROFESSOR / CONTRATADO</strong><small>◆ DADOS FIXOS</small></div><h3>Matheus Henrique de Azevedo</h3><p>CPF: 091.878.681-99 · Nascimento: 23/01/2008<br>Matheushenrique171093@gmail.com</p></div>
+<form id="contractForm" novalidate>
+<h3 class="form-heading">01 / Dados do contratante</h3><div class="fields">
+<div class="field wide"><label for="nome">Nome completo do aluno *</label><input id="nome" required maxlength="130" autocomplete="off" placeholder="Nome e sobrenome"></div>
+<div class="field"><label for="cpf">CPF *</label><input id="cpf" inputmode="numeric" required maxlength="14" autocomplete="off" placeholder="000.000.000-00"></div>
+<div class="field"><label for="nascimento">Nascimento <small>(opcional)</small></label><input type="date" id="nascimento"></div>
+<div class="field wide"><label for="endereco">Endereço completo <small>(opcional)</small></label><input id="endereco" maxlength="210" autocomplete="off" placeholder="Rua, número, bairro, cidade / UF"></div></div>
+<hr><h3 class="form-heading">02 / Condições das aulas</h3><div class="fields">
+<div class="field"><label for="mensalidade">Mensalidade (R$) *</label><input id="mensalidade" required inputmode="decimal" placeholder="250,00"></div>
+<div class="field"><label for="vencimento">Dia do vencimento *</label><select id="vencimento" required><option value="">Selecione</option></select></div>
+<div class="field wide"><label for="horario">Dia e horário fixo <small>(opcional)</small></label><input id="horario" maxlength="90" placeholder="Ex.: terças-feiras, às 19h"></div></div>
+<hr><h3 class="form-heading">03 / Emissão</h3><div class="fields"><div class="field wide"><label for="dataContrato">Data da assinatura *</label><input type="date" id="dataContrato" required></div></div>
+<p class="help">Toque na data para abrir o calendário. O vencimento pode ser ajustado de 1 a 31; confira o combinado para meses mais curtos. As assinaturas ficam em branco.</p>
+<button class="primary" id="downloadBtn" type="submit">↓ &nbsp; GERAR E BAIXAR PDF</button><button class="secondary" id="printBtn" type="button">Imprimir em A4</button><a class="preview-link" href="#previa">Conferir prévia do contrato ↓</a>
+<div class="alert" id="alert" role="alert"></div><p class="privacy">Os dados digitados são usados apenas neste navegador. Não há cadastro, envio automático nem armazenamento em servidor.</p>
+</form></section>
+<section class="panel preview-panel" id="previa"><div class="preview-bar"><div><h2><span class="dot"></span>Prévia do contrato</h2><small>Atualização conforme você preenche</small></div><small>A4 · PDF</small></div>
+<div class="preview-stage"><article class="doc" id="doc"><div class="doc-brand">MATHEUS <span>WKEY</span></div><h2>Contrato simples de aulas de teclado</h2><div class="doc-rule"></div>
+<section><h3>Professor (contratado)</h3><p><strong>Matheus Henrique de Azevedo</strong><br>CPF: 091.878.681-99 | Nascimento: 23/01/2008<br>E-mail: Matheushenrique171093@gmail.com</p></section>
+<section><h3>Aluno(a) (contratante)</h3><p><strong id="pNome">Nome completo do aluno</strong><br>CPF: <span id="pCpf">________________</span> | Nascimento: <span id="pNasc">__/__/____</span><br>Endereço: <span id="pEndereco">________________________________</span></p></section>
+<div class="clauses"><section><h3>Cláusula 1 - Das aulas</h3><p>1.1 - 01 aula por semana, com duração de 01 hora.<br>1.2 - Dia e horário fixo: <span id="pHorario">____________________________</span></p></section>
+<section><h3>Cláusula 2 - Do pagamento</h3><p>2.1 - Mensalidade: <span id="pValor">R$ ______</span> <span id="pExtenso"></span>.<br>2.2 - Pagamento antecipado, com vencimento todo dia <span id="pVenc">__</span>.<br>2.3 - Sem pagamento, não haverá aula.<br>2.4 - Não haverá reembolso após o início do mês.</p></section>
+<section><h3>Cláusula 3 - Das faltas</h3><p>3.1 - Aviso com 24h de antecedência dá direito à reposição no mesmo mês.<br>3.2 - Sem aviso, a aula será considerada dada.<br>3.3 - Falta do professor dá direito à reposição.</p></section>
+<section><h3>Cláusula 4 - Do cancelamento</h3><p>4.1 - Aviso mínimo de 07 dias antes do vencimento.</p></section></div>
+<div class="doc-date" id="pData">Jundiaí, __ de __________ de ____.</div><div class="doc-signs"><div>Professor (contratado)</div><div>Aluno(a) (contratante)</div></div><div class="doc-meta">MATHEUS WKEY · Aulas de teclado</div></article></div></section></main>
+<footer><b>MATHEUS WKEY</b> / DOCUMENTOS <span>Contratos com simplicidade e identidade.</span></footer></div>
+<script src="app.js"></script></body></html>
