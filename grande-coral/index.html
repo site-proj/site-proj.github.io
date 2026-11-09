@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faça parte do Grande Coral</title>
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+  :root{
+    --gold-1:#fff4d6; --gold-2:#f7d58a; --gold-3:#e0a64a; --gold-4:#a8691f;
+    --bg:#070403;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);overflow:hidden}
+  body{display:grid;place-items:center}
+  #viewport{position:relative;width:100vw;height:100vh;display:grid;place-items:center}
+  #stage{
+    position:absolute;left:50%;top:50%;width:1080px;height:1920px;
+    transform-origin:center center;overflow:hidden;background:#000;
+  }
+  .layer{position:absolute;inset:0}
+  #poster{
+    background:url(poster.png) center top/1080px auto no-repeat;
+    transform-origin:50% 30%;will-change:transform,filter,opacity;
+  }
+  #vignette{
+    background:
+      radial-gradient(ellipse 62% 9% at 50% 29%, rgba(6,3,1,.88), rgba(6,3,1,.55) 55%, transparent 100%),
+      radial-gradient(ellipse 120% 70% at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%);
+  }
+  #rays{
+    background:repeating-conic-gradient(from 0deg at 50% 2.7%, rgba(255,214,140,.13) 0deg 1.1deg, transparent 1.2deg 9deg);
+    -webkit-mask-image:radial-gradient(circle at 50% 2.7%, #000 0, rgba(0,0,0,.6) 18%, transparent 48%);
+            mask-image:radial-gradient(circle at 50% 2.7%, #000 0, rgba(0,0,0,.6) 18%, transparent 48%);
+    mix-blend-mode:screen;transform-origin:50% 2.7%;
+  }
+  #flare{
+    background:radial-gradient(circle at 50% 2.7%, rgba(255,250,235,1) 0, rgba(255,214,140,.75) 2.2%, rgba(240,160,60,.25) 9%, transparent 26%);
+    mix-blend-mode:screen;
+  }
+  #sweep{
+    background:linear-gradient(105deg, transparent 40%, rgba(255,220,160,.16) 50%, transparent 60%);
+    background-size:300% 100%;mix-blend-mode:screen;
+  }
+  canvas#dust{mix-blend-mode:screen}
+
+  /* ---------- Type ---------- */
+  #type{position:absolute;left:0;right:0;top:418px;text-align:center}
+  .kicker-row{display:flex;align-items:center;justify-content:center;gap:26px;height:60px}
+  .kicker{
+    font-family:'Cinzel',serif;font-weight:600;font-size:40px;letter-spacing:.32em;
+    color:var(--gold-1);text-shadow:0 0 18px rgba(255,190,90,.55);
+    white-space:nowrap;padding-left:.32em;
+  }
+  .kicker span{display:inline-block;will-change:transform,opacity,filter}
+  .wave{width:150px;height:60px;overflow:visible}
+  .wave path{fill:none;stroke:url(#g);stroke-width:2.4;stroke-linecap:round}
+  .script-wrap{position:relative;display:inline-block;margin:-70px 0 -60px}
+  .script{
+    font-family:'Great Vibes',cursive;font-size:168px;line-height:1;white-space:nowrap;
+    padding:80px 90px 70px;
+    background:linear-gradient(100deg,var(--gold-4) 0%,var(--gold-3) 18%,var(--gold-2) 34%,var(--gold-1) 46%,#fff 50%,var(--gold-1) 54%,var(--gold-2) 66%,var(--gold-3) 82%,var(--gold-4) 100%);
+    background-size:260% 100%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 14px rgba(255,180,80,.55)) drop-shadow(0 4px 2px rgba(0,0,0,.6));
+  }
+  /* ---------- CTA ---------- */
+  #ctaShade{background:linear-gradient(to top, rgba(4,2,1,.92) 0, rgba(4,2,1,.7) 7%, transparent 17%)}
+  #cta{position:absolute;left:0;right:0;bottom:92px;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .pill{
+    position:relative;overflow:hidden;padding:26px 64px 24px;border-radius:999px;
+    font-family:'Cinzel',serif;font-weight:600;font-size:46px;letter-spacing:.2em;padding-right:calc(64px - .2em);
+    color:#2a1606;
+    background:linear-gradient(180deg,#fff1cc 0%,#f5cf7e 45%,#d9993f 100%);
+    box-shadow:0 0 0 2px rgba(255,236,190,.55) inset, 0 10px 30px rgba(0,0,0,.6), 0 0 50px rgba(255,180,80,.45);
+  }
+  .pill .shine{position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.85) 50%,transparent 65%);background-size:300% 100%;mix-blend-mode:soft-light}
+  .ring{position:absolute;inset:-2px;border-radius:999px;border:2px solid rgba(255,214,140,.9);pointer-events:none}
+  .cta-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:38px;color:var(--gold-1);text-shadow:0 2px 10px rgba(0,0,0,.8)}
+  .pen{
+    position:absolute;top:50%;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;
+    background:radial-gradient(circle, #fff 0, rgba(255,230,170,.9) 12%, rgba(255,180,80,.35) 35%, transparent 70%);
+    mix-blend-mode:screen;pointer-events:none;
+  }
+  .underline{
+    height:2px;margin:-8px auto 0;width:520px;
+    background:linear-gradient(90deg,transparent,var(--gold-2) 30%,#fff 50%,var(--gold-2) 70%,transparent);
+    box-shadow:0 0 12px rgba(255,200,110,.8);transform-origin:center;
+  }
+
+  #fade{background:#000;pointer-events:none}
+
+  #controls{
+    position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5;
+    font:500 13px/1 system-ui,sans-serif;
+  }
+  #controls button{
+    background:rgba(20,12,6,.75);color:#f7d58a;border:1px solid rgba(247,213,138,.35);
+    padding:9px 14px;border-radius:999px;cursor:pointer;backdrop-filter:blur(6px)
+  }
+  body.capture #controls{display:none}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div class="layer" id="poster"></div>
+    <div class="layer" id="vignette"></div>
+    <div class="layer" id="rays"></div>
+    <div class="layer" id="flare"></div>
+    <div class="layer" id="sweep"></div>
+    <canvas class="layer" id="dust" width="1080" height="1920"></canvas>
+
+    <div id="type">
+      <svg width="0" height="0" style="position:absolute">
+        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#f7d58a" stop-opacity="0"/><stop offset=".5" stop-color="#f7d58a"/><stop offset="1" stop-color="#fff4d6"/></linearGradient></defs>
+      </svg>
+      <div class="kicker-row">
+        <svg class="wave" id="waveL" viewBox="0 0 150 60"><path/><path style="opacity:.45"/></svg>
+        <div class="kicker" id="kicker"></div>
+        <svg class="wave" id="waveR" viewBox="0 0 150 60" style="transform:scaleX(-1)"><path/><path style="opacity:.45"/></svg>
+      </div>
+      <div class="script-wrap" id="scriptWrap">
+        <div class="script" id="script">Grande Coral</div>
+        <div class="pen" id="pen"></div>
+      </div>
+      <div class="underline" id="underline"></div>
+    </div>
+
+    <div class="layer" id="ctaShade"></div>
+    <div id="cta">
+      <div style="position:relative">
+        <div class="pill" id="pill">INSCRIÇÕES ABERTAS<div class="shine" id="shine"></div></div>
+        <div class="ring" id="ring"></div>
+      </div>
+    </div>
+
+    <div class="layer" id="fade"></div>
+  </div>
+</div>
+<div id="controls"><button id="replay">↺ Repetir</button></div>
+
+<script>
+const DURATION = 12;
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const prog = (t,a,b)=>clamp((t-a)/(b-a));
+const easeOut = x=>1-Math.pow(1-x,3);
+const easeInOut = x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const easeExpo = x=>x===1?1:1-Math.pow(2,-10*x);
+
+/* letters */
+const KICK = "FAÇA PARTE DO";
+$('kicker').innerHTML = [...KICK].map(c=>`<span>${c===' '?'&nbsp;':c}</span>`).join('');
+const letters = [...$('kicker').children];
+
+/* fit stage */
+function fit(){
+  const s = Math.min(innerWidth/1080, innerHeight/1920);
+  $('stage').style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+/* seeded particles */
+let seed = 7; const rnd=()=>((seed=(seed*16807)%2147483647)/2147483647);
+const P = Array.from({length:170},()=>({
+  x:rnd()*1080, y:rnd()*1920, r: rnd()<.12 ? 3+rnd()*5 : .8+rnd()*2.2,
+  v: 25+rnd()*70, drift: 10+rnd()*30, ph: rnd()*6.28, tw: 1+rnd()*3
+}));
+const ctx = $('dust').getContext('2d');
+function drawDust(t, amt){
+  ctx.clearRect(0,0,1080,1920);
+  ctx.globalCompositeOperation='lighter';
+  for(const p of P){
+    const y = ((p.y - p.v*t) % 1920 + 1920) % 1920;
+    const x = p.x + Math.sin(t*.6+p.ph)*p.drift;
+    const a = amt * (.35+.65*Math.abs(Math.sin(t*p.tw+p.ph))) * (p.r>3?.35:.9);
+    const g = ctx.createRadialGradient(x,y,0,x,y,p.r*3);
+    g.addColorStop(0,`rgba(255,236,190,${a})`);
+    g.addColorStop(.4,`rgba(255,190,90,${a*.5})`);
+    g.addColorStop(1,'rgba(255,160,60,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,p.r*3,0,6.283); ctx.fill();
+  }
+}
+
+/* sound wave flourishes */
+function wavePath(t, amp, freq, phase){
+  let d=''; for(let i=0;i<=150;i+=3){
+    const env = Math.sin(Math.PI*i/150);           // fade at ends
+    const y = 30 + Math.sin(i*freq + t*5 + phase)*amp*env*(0.6+0.4*Math.sin(t*2.3+i*.05));
+    d += (i?'L':'M')+i+' '+y.toFixed(2);
+  } return d;
+}
+
+function render(t){
+  /* poster: blur-in + slow cinematic push */
+  const pIn = easeOut(prog(t,0,2.4));
+  const zoom = 1.16 - .14*easeInOut(prog(t,0,DURATION));
+  const drift = -18*easeInOut(prog(t,0,DURATION));
+  $('poster').style.opacity = pIn;
+  $('poster').style.filter = `blur(${(1-pIn)*14}px) brightness(${.55+.45*pIn})`;
+  $('poster').style.transform = `scale(${zoom}) translateY(${drift}px)`;
+  $('vignette').style.opacity = easeOut(prog(t,2,3.4));
+
+  /* star flare + rays */
+  const flareIn = easeExpo(prog(t,.3,1.6));
+  const pulse = .82 + .18*Math.sin(t*2.4);
+  $('flare').style.opacity = flareIn*pulse;
+  $('rays').style.opacity = flareIn*(.6+.25*Math.sin(t*1.7));
+  $('rays').style.transform = `rotate(${t*2.2}deg) scale(${1+.04*Math.sin(t)})`;
+
+  /* light sweeps */
+  const sw = prog(t,1.2,4.2), sw2 = prog(t,7.6,10.2);
+  $('sweep').style.backgroundPosition = `${100-200*(sw<1?sw:sw2)}% 0`;
+  $('sweep').style.opacity = (sw>0&&sw<1)||(sw2>0&&sw2<1) ? 1 : 0;
+
+  drawDust(t, easeOut(prog(t,.8,3)));
+
+  /* kicker letters */
+  letters.forEach((el,i)=>{
+    const k = easeOut(prog(t, 2.9 + i*.07, 3.9 + i*.07));
+    el.style.opacity = k;
+    el.style.transform = `translateY(${(1-k)*26}px) scale(${1.25-.25*k})`;
+    el.style.filter = `blur(${(1-k)*8}px)`;
+  });
+  $('kicker').style.letterSpacing = `${.55 - .23*easeOut(prog(t,2.9,4.6))}em`;
+
+  /* waves */
+  const wv = easeOut(prog(t,3.6,4.8));
+  for(const id of ['waveL','waveR']){
+    const [a,b] = $(id).querySelectorAll('path');
+    a.setAttribute('d', wavePath(t, 11*wv, .085, 0));
+    b.setAttribute('d', wavePath(t, 7*wv, .13, 2));
+    $(id).style.opacity = wv;
+  }
+
+  /* script "Grande Coral" — written in with a glowing pen */
+  const w = easeInOut(prog(t,4.2,6.6));
+  const edge = w*120 - 10; // percent, soft 10% edge
+  const m = `linear-gradient(90deg,#000 ${edge}%,transparent ${edge+10}%)`;
+  $('script').style.webkitMaskImage = m; $('script').style.maskImage = m;
+  const shim = prog(t,6.8,8.6);
+  $('script').style.backgroundPosition = `${100 - 100*easeInOut(shim)}% 0`;
+  const sc = 1 + .025*Math.sin(prog(t,6.6,12)*Math.PI*2)*prog(t,6.6,7.6);
+  $('scriptWrap').style.transform = `scale(${sc})`;
+  const pen = $('pen');
+  pen.style.left = `${clamp(edge+5,0,100)}%`;
+  pen.style.opacity = (w>0 && w<1) ? 1 : Math.max(0, 1-prog(t,6.6,7.1)) * (w>=1?1:0);
+
+  /* underline */
+  const u = easeExpo(prog(t,6.3,7.6));
+  $('underline').style.transform = `scaleX(${u})`;
+  $('underline').style.opacity = u;
+
+  /* CTA: inscrições abertas */
+  $('ctaShade').style.opacity = easeOut(prog(t,6.6,7.8));
+  const c = prog(t,7.0,8.0), ce = easeOut(c);
+  const back = c<1 ? 1 + .12*Math.sin(c*Math.PI)*(1-c) : 1;          // slight overshoot
+  $('pill').style.opacity = ce;
+  $('pill').style.transform = `translateY(${(1-ce)*60}px) scale(${(.85+.15*ce)*back})`;
+  $('pill').style.filter = `blur(${(1-ce)*10}px)`;
+  const sh = (t-8.2)%1.8; // shine every 1.8s
+  $('shine').style.backgroundPosition = `${t<8.2?150:150-250*clamp(sh/0.9)}% 0`;
+  const rp = t<8 ? -1 : ((t-8)%1.4)/1.4;                               // pulse ring
+  $('ring').style.opacity = rp<0?0:(1-rp)*.9;
+  $('ring').style.transform = `scale(${1+rp*.18},${1+rp*.5})`;
+
+  /* loop fade */
+  $('fade').style.opacity = Math.max(1-prog(t,0,.5), easeInOut(prog(t,DURATION-.6,DURATION)));
+}
+
+/* expose for frame-by-frame capture */
+window.__render = render; window.__DURATION = DURATION;
+
+if(!location.search.includes('capture')){
+  let start = null;
+  const loop = ts => { if(start===null) start=ts; render(((ts-start)/1000)%DURATION); requestAnimationFrame(loop); };
+  document.fonts.ready.then(()=>requestAnimationFrame(loop));
+  $('replay').onclick = ()=>{ start=null; };
+} else { document.body.classList.add('capture'); render(0); }
+</script>
+</body>
+</html>
